@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken"); // installed this
 
 const Users = require("../users/users-model.js");
 
-// for endpoints beginning with /api/auth
+// Register
 router.post("/register", (req, res) => {
   let user = req.body;
   const hash = bcrypt.hashSync(user.password, 10); // 2 ^ n
@@ -19,6 +19,7 @@ router.post("/register", (req, res) => {
     });
 });
 
+//Login
 router.post("/login", (req, res) => {
   let { username, password } = req.body;
 
@@ -39,6 +40,7 @@ router.post("/login", (req, res) => {
       }
     })
     .catch(error => {
+      console.log(error);
       res.status(500).json(error);
     });
 });
@@ -47,7 +49,7 @@ router.post("/login", (req, res) => {
 function signToken(user) {
   const payload = {
     username: user.username,
-    role: "student", // this will come from the database users.role
+    department: user.department, // this will come from the database users.role
   };
 
   const secret = process.env.JWT_SECRET || "is it secret, is it safe?";
